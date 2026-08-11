@@ -21,6 +21,11 @@
   --color-violet-tint: #ede6fe;
   --color-cyan-tint: #d6fbf5;
 
+  /* Mastery stamp text — darker readable shades over the tints above. */
+  --color-shaky-text: #b4004f;
+  --color-solid-text: #5b21b6;
+  --color-mastered-text: #00786b;
+
   /* ===== TYPE ===== */
   --font-display: "Archivo Black", sans-serif;
   --font-sans: "Space Grotesk", sans-serif;

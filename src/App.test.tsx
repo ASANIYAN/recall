@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import App from './App'
 
-test('renders the app shell', () => {
+test('renders the empty state when nothing is due', async () => {
   render(<App />)
-  expect(screen.getByText('Recall')).toBeInTheDocument()
+  expect(await screen.findByText('Nothing due right now.')).toBeInTheDocument()
 })
