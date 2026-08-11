@@ -26,3 +26,6 @@ dist-ssr
 
 PLAN.md
 CLAUDE.md
+design-system.html
+.vercel
+.env*

@@ -26,6 +26,14 @@
       "semicolons": "asNeeded"
     }
   },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    },
+    "linter": {
+      "enabled": true
+    }
+  },
   "assist": {
     "enabled": true,
     "actions": {

@@ -1,111 +1,92 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
-  --heading: system-ui, "Segoe UI", Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+@theme {
+  /* ===== COLOR ===== */
+  --color-bg: #f2e94e;
+  --color-bg-soft: #f7f0a8;
+  --color-surface: #fcfcf8;
+  --color-ink: #111114;
+  --color-ink-60: rgba(17, 17, 20, 0.6);
+  --color-ink-35: rgba(17, 17, 20, 0.35);
+  --color-ink-12: rgba(17, 17, 20, 0.12);
 
-  font: 18px / 145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --color-pink: #ff3e7a; /* Again / Shaky */
+  --color-amber: #ffd23f; /* Hard */
+  --color-violet: #8b5cf6; /* Good / Solid */
+  --color-cyan: #00d9c0; /* Easy / Mastered */
+  --color-pink-tint: #ffe1ec;
+  --color-amber-tint: #fff6d6;
+  --color-violet-tint: #ede6fe;
+  --color-cyan-tint: #d6fbf5;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  /* ===== TYPE ===== */
+  --font-display: "Archivo Black", sans-serif;
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-mono: "Space Mono", monospace;
+
+  /* ===== SHADOW (hard-edged, no blur — see CLAUDE.md §8) ===== */
+  --shadow-sm: 4px 4px 0px var(--color-ink);
+  --shadow-md: 8px 8px 0px var(--color-ink);
+  --shadow-lg: 12px 12px 0px var(--color-ink);
+
+  /* ===== SPACING (4px base) ===== */
+  --spacing: 4px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+/*
+ * shadcn primitives (Form, Select, Dialog, Toast) read these semantic
+ * tokens, not the raw palette above. Remapped onto the neubrutalist
+ * palette so shadcn-generated components inherit it automatically —
+ * CLAUDE.md §2 calls shadcn "heavily reskinned," not themed separately.
+ * One fixed theme only: this app has no dark mode.
+ */
+@theme inline {
+  --color-background: var(--color-surface);
+  --color-foreground: var(--color-ink);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-ink);
+  --color-popover: var(--color-surface);
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-violet);
+  --color-primary-foreground: var(--color-surface);
+  --color-secondary: var(--color-bg-soft);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted: var(--color-bg-soft);
+  --color-muted-foreground: var(--color-ink-60);
+  --color-accent: var(--color-violet-tint);
+  --color-accent-foreground: var(--color-ink);
+  --color-destructive: var(--color-pink);
+  --color-destructive-foreground: var(--color-surface);
+  --color-border: var(--color-ink);
+  --color-input: var(--color-ink);
+  --color-ring: var(--color-violet);
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
+}
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+:root {
+  --radius: 0px;
 }
 
 body {
   margin: 0;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+  html {
+    @apply font-sans;
   }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
 }
