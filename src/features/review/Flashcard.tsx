@@ -18,11 +18,11 @@ export function Flashcard({ card, flipped, onFlip }: FlashcardProps) {
     <button
       type="button"
       onClick={onFlip}
-      className="w-full max-w-md cursor-pointer text-left [perspective:1200px]"
+      className="w-full max-w-md cursor-pointer text-left [perspective:1200px] focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-4"
       aria-label="Flip card"
     >
       <div
-        className={`relative min-h-64 w-full [transform-style:preserve-3d] transition-transform duration-200 ease-out ${
+        className={`relative min-h-64 w-full [transform-style:preserve-3d] transition-transform duration-200 ease-out active:scale-[0.98] ${
           flipped ? '[transform:rotateY(180deg)]' : ''
         }`}
       >

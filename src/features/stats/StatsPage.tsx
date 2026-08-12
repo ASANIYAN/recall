@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { useParams } from 'react-router'
+import { toast } from 'sonner'
 import { getCardsByDeck, getDeck, getSnapshotsByDeck } from '@/db/client'
 import type { Card, Deck, Snapshot } from '@/db/schema'
 import { deriveMastery } from '@/features/mastery/deriveMastery'
+import { PageLoading } from '@/shared/PageLoading'
+import { PageMessage } from '@/shared/PageMessage'
+import { TextLink } from '@/shared/TextLink'
 import { MasteryTrendChart } from './MasteryTrendChart'
 import { ProblemCardsList } from './ProblemCardsList'
 import { StatBlock } from './StatBlock'
@@ -10,7 +14,7 @@ import { writeSnapshotForDeck } from './writeSnapshot'
 
 export function StatsPage() {
   const { deckId } = useParams<{ deckId: string }>()
-  const [deck, setDeck] = useState<Deck | null>(null)
+  const [deck, setDeck] = useState<Deck | null | undefined>(undefined)
   const [cards, setCards] = useState<Card[] | null>(null)
   const [snapshots, setSnapshots] = useState<Snapshot[] | null>(null)
 
@@ -19,16 +23,26 @@ export function StatsPage() {
     let cancelled = false
 
     async function load() {
-      await writeSnapshotForDeck(deckId as string)
-      const [loadedDeck, loadedCards, loadedSnapshots] = await Promise.all([
-        getDeck(deckId as string),
-        getCardsByDeck(deckId as string),
-        getSnapshotsByDeck(deckId as string),
-      ])
-      if (cancelled) return
-      setDeck(loadedDeck ?? null)
-      setCards(loadedCards)
-      setSnapshots(loadedSnapshots)
+      try {
+        const loadedDeck = await getDeck(deckId as string)
+        if (cancelled) return
+        if (!loadedDeck) {
+          setDeck(null)
+          return
+        }
+
+        await writeSnapshotForDeck(deckId as string)
+        const [loadedCards, loadedSnapshots] = await Promise.all([
+          getCardsByDeck(deckId as string),
+          getSnapshotsByDeck(deckId as string),
+        ])
+        if (cancelled) return
+        setDeck(loadedDeck)
+        setCards(loadedCards)
+        setSnapshots(loadedSnapshots)
+      } catch {
+        if (!cancelled) toast.error('Could not load stats for this deck.')
+      }
     }
 
     load()
@@ -37,7 +51,18 @@ export function StatsPage() {
     }
   }, [deckId])
 
-  if (!deck || !cards || !snapshots) return null
+  if (deck === undefined || !cards || !snapshots) return <PageLoading />
+
+  if (deck === null) {
+    return (
+      <PageMessage
+        title="Deck Not Found"
+        message="This deck does not exist, or was deleted."
+        linkTo="/"
+        linkLabel="← Back to decks"
+      />
+    )
+  }
 
   const masteryCounts = { new: 0, shaky: 0, solid: 0, mastered: 0 }
   let highestLapses = 0
@@ -49,12 +74,7 @@ export function StatsPage() {
   return (
     <div className="min-h-svh bg-bg p-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-6">
-        <Link
-          to={`/decks/${deck.id}`}
-          className="font-mono text-ink-60 text-xs hover:text-ink"
-        >
-          ← {deck.name}
-        </Link>
+        <TextLink to={`/decks/${deck.id}`}>← {deck.name}</TextLink>
         <h1 className="font-display text-2xl text-ink uppercase">Stats</h1>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">

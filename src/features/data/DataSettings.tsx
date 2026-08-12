@@ -1,5 +1,5 @@
 import { type ChangeEvent, useRef, useState } from 'react'
-import { Link } from 'react-router'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -8,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { TextLink } from '@/shared/TextLink'
 import { buildExportPayload, downloadExport } from './exportData'
 import {
   commitImport,
@@ -25,10 +26,20 @@ export function DataSettings() {
   } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [status, setStatus] = useState<string | null>(null)
+  const [isExporting, setIsExporting] = useState(false)
+  const [isParsingFile, setIsParsingFile] = useState(false)
+  const [isImporting, setIsImporting] = useState(false)
 
   async function handleExport() {
-    const payload = await buildExportPayload()
-    downloadExport(payload)
+    setIsExporting(true)
+    try {
+      const payload = await buildExportPayload()
+      downloadExport(payload)
+    } catch {
+      toast.error('Could not export your data.')
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   async function handleFileSelected(event: ChangeEvent<HTMLInputElement>) {
@@ -38,31 +49,41 @@ export function DataSettings() {
 
     setError(null)
     setStatus(null)
+    setIsParsingFile(true)
     try {
       const payload = parseImportFile(await file.text())
       const summary = await computeImportSummary(payload)
       setPendingImport({ payload, summary })
     } catch {
       setError('That file is not a valid Recall export.')
+    } finally {
+      setIsParsingFile(false)
     }
   }
 
   async function confirmImport() {
     if (!pendingImport) return
     const { summary } = pendingImport
-    await commitImport(pendingImport.payload)
-    setStatus(
-      `Added ${summary.decksAdded} decks and ${summary.cardsAdded} cards. Updated ${summary.decksUpdated} decks and ${summary.cardsUpdated} cards.`,
-    )
-    setPendingImport(null)
+    setIsImporting(true)
+    try {
+      await commitImport(pendingImport.payload)
+      setStatus(
+        `Added ${summary.decksAdded} decks and ${summary.cardsAdded} cards. Updated ${summary.decksUpdated} decks and ${summary.cardsUpdated} cards.`,
+      )
+      setPendingImport(null)
+    } catch {
+      toast.error(
+        'Import failed partway through. Some records may not have been saved.',
+      )
+    } finally {
+      setIsImporting(false)
+    }
   }
 
   return (
     <div className="min-h-svh bg-bg p-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-6">
-        <Link to="/" className="font-mono text-ink-60 text-xs hover:text-ink">
-          ← Decks
-        </Link>
+        <TextLink to="/">← Decks</TextLink>
         <h1 className="font-display text-2xl text-ink uppercase">Data</h1>
 
         <div className="flex flex-col items-start gap-3 border-[3px] border-ink bg-surface p-5">
@@ -70,8 +91,12 @@ export function DataSettings() {
           <p className="font-mono text-ink-60 text-xs">
             Download all decks and cards as JSON.
           </p>
-          <Button variant="outline" onClick={handleExport}>
-            Export Data
+          <Button
+            variant="outline"
+            onClick={handleExport}
+            disabled={isExporting}
+          >
+            {isExporting ? 'Exporting…' : 'Export Data'}
           </Button>
         </div>
 
@@ -90,8 +115,9 @@ export function DataSettings() {
           <Button
             variant="outline"
             onClick={() => fileInputRef.current?.click()}
+            disabled={isParsingFile}
           >
-            Choose File
+            {isParsingFile ? 'Reading File…' : 'Choose File'}
           </Button>
           {error && <p className="font-mono text-pink text-xs">{error}</p>}
           {status && <p className="font-mono text-ink-60 text-xs">{status}</p>}
@@ -115,11 +141,19 @@ export function DataSettings() {
             </p>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setPendingImport(null)}>
+            <Button
+              variant="outline"
+              onClick={() => setPendingImport(null)}
+              disabled={isImporting}
+            >
               Cancel
             </Button>
-            <Button variant="violet" onClick={confirmImport}>
-              Import
+            <Button
+              variant="violet"
+              onClick={confirmImport}
+              disabled={isImporting}
+            >
+              {isImporting ? 'Importing…' : 'Import'}
             </Button>
           </DialogFooter>
         </DialogContent>

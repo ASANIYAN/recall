@@ -1,9 +1,12 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes, useParams } from 'react-router'
+import { Toaster } from '@/components/ui/sonner'
 import { DataSettings } from '@/features/data/DataSettings'
 import { DeckDetail } from '@/features/decks/DeckDetail'
 import { DeckList } from '@/features/decks/DeckList'
 import { ReviewSession } from '@/features/review/ReviewSession'
+import { PageLoading } from '@/shared/PageLoading'
+import { PageMessage } from '@/shared/PageMessage'
 
 // recharts is heavy and only needed on the stats page — the review loop is
 // the daily-use core path, so it stays out of the main bundle. Same
@@ -15,6 +18,17 @@ const StatsPage = lazy(() =>
 function ReviewRoute() {
   const { deckId } = useParams<{ deckId: string }>()
   return <ReviewSession deckId={deckId} />
+}
+
+function NotFoundRoute() {
+  return (
+    <PageMessage
+      title="Not Found"
+      message="That page does not exist."
+      linkTo="/"
+      linkLabel="← Back to decks"
+    />
+  )
 }
 
 function App() {
@@ -29,12 +43,14 @@ function App() {
         <Route
           path="/decks/:deckId/stats"
           element={
-            <Suspense fallback={null}>
+            <Suspense fallback={<PageLoading />}>
               <StatsPage />
             </Suspense>
           }
         />
+        <Route path="*" element={<NotFoundRoute />} />
       </Routes>
+      <Toaster />
     </BrowserRouter>
   )
 }

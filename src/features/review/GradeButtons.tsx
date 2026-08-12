@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority'
 import type { Grade } from './scheduling/learningSteps'
 
 const gradeButtonVariants = cva(
-  'flex-1 border-[3px] border-ink bg-surface px-1 py-3 text-center font-display text-[11px] uppercase transition-colors disabled:pointer-events-none disabled:opacity-50',
+  'flex-1 border-[3px] border-ink bg-surface px-1 py-3 text-center font-display text-[11px] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       grade: {

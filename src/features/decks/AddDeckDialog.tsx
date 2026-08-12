@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -35,7 +36,12 @@ export function AddDeckDialog({ onCreated }: AddDeckDialogProps) {
       name: values.name,
       createdAt: new Date().toISOString(),
     }
-    await createDeck(deck)
+    try {
+      await createDeck(deck)
+    } catch {
+      toast.error('Could not save that deck. Try again.')
+      return
+    }
     onCreated?.(deck)
     setOpen(false)
   }
@@ -58,7 +64,7 @@ export function AddDeckDialog({ onCreated }: AddDeckDialogProps) {
 function DeckForm({
   onSubmit,
 }: {
-  onSubmit: (values: DeckFormValues) => void
+  onSubmit: (values: DeckFormValues) => Promise<void>
 }) {
   const nameRef = useRef<HTMLInputElement>(null)
   const form = useForm<DeckFormValues>({
@@ -96,8 +102,13 @@ function DeckForm({
             </FormItem>
           )}
         />
-        <Button type="submit" variant="violet" className="self-start">
-          Save Deck
+        <Button
+          type="submit"
+          variant="violet"
+          className="self-start"
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? 'Saving…' : 'Save Deck'}
         </Button>
       </form>
     </Form>
