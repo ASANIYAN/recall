@@ -1,18 +1,13 @@
 import { Link } from 'react-router'
 import type { Card } from '@/db/schema'
-
-const PROBLEM_CARDS_LIMIT = 5
+import { selectProblemCards } from './selectProblemCards'
 
 interface ProblemCardsListProps {
   cards: Card[]
 }
 
-/** Top cards by lapses — the "what needs work" signal, not an activity metric. CLAUDE.md §7. */
 export function ProblemCardsList({ cards }: ProblemCardsListProps) {
-  const problemCards = [...cards]
-    .filter((card) => card.lapses > 0)
-    .sort((a, b) => b.lapses - a.lapses)
-    .slice(0, PROBLEM_CARDS_LIMIT)
+  const problemCards = selectProblemCards(cards)
 
   if (problemCards.length === 0) {
     return (

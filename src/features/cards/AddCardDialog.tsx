@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -8,12 +6,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { createCard } from '@/db/client'
 import type { Card, Deck } from '@/db/schema'
-import { INITIAL_EASE_FACTOR } from '@/features/review/scheduling/constants'
-import { getLastUsedDeckId, setLastUsedDeckId } from '@/shared/lastUsedDeck'
 import { CardForm } from './CardForm'
-import { type CardFormValues, parseTags } from './schema'
+import { useAddCardDialog } from './useAddCardDialog'
 
 interface AddCardDialogProps {
   decks: Deck[]
@@ -28,36 +23,13 @@ export function AddCardDialog({
   defaultDeckId,
   onCreated,
 }: AddCardDialogProps) {
-  const [open, setOpen] = useState(false)
+  const { open, setOpen, initialDeckId, handleSubmit } = useAddCardDialog({
+    decks,
+    defaultDeckId,
+    onCreated,
+  })
 
   if (decks.length === 0) return null
-
-  const initialDeckId = defaultDeckId ?? getLastUsedDeckId() ?? decks[0].id
-
-  async function handleSubmit(values: CardFormValues) {
-    const card: Card = {
-      id: crypto.randomUUID(),
-      deckId: values.deckId,
-      front: values.front,
-      back: values.back,
-      tags: parseTags(values.tags),
-      createdAt: new Date().toISOString(),
-      phase: 'learning',
-      learningStep: 0,
-      interval: 0,
-      easeFactor: INITIAL_EASE_FACTOR,
-      lapses: 0,
-    }
-    try {
-      await createCard(card)
-    } catch {
-      toast.error('Could not save that card. Try again.')
-      return
-    }
-    setLastUsedDeckId(values.deckId)
-    onCreated?.(card)
-    setOpen(false)
-  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

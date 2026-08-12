@@ -13,6 +13,13 @@ import { type Grade, LEARNING_STEP_MINUTES } from './scheduling/learningSteps'
 /** Pause after grading so the updated mastery stamp is visible before the next card. */
 const ADVANCE_DELAY_MS = 700
 
+const GRADE_BY_KEY: Record<string, Grade> = {
+  '1': 'again',
+  '2': 'hard',
+  '3': 'good',
+  '4': 'easy',
+}
+
 function todayISO() {
   return new Date().toISOString().slice(0, 10)
 }
@@ -28,15 +35,19 @@ function interleave(a: Card[], b: Card[]): Card[] {
   return result
 }
 
+/** Keyboard-first review loop: Space flips, 1–4 grade. See CLAUDE.md §7. */
 export function useReviewSession(deckId?: string) {
   const [queue, setQueue] = useState<Card[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [flipped, setFlipped] = useState(false)
   const queueRef = useRef<Card[]>([])
   const learningTimers = useRef(
     new Map<string, ReturnType<typeof setTimeout>>(),
   )
+
+  const currentCard = queue[0] ?? null
 
   useEffect(() => {
     queueRef.current = queue
@@ -132,12 +143,40 @@ export function useReviewSession(deckId?: string) {
     [isTransitioning],
   )
 
+  const toggleFlip = useCallback(() => setFlipped((f) => !f), [])
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional — resets flip state whenever the card changes, even though the id itself isn't read
+  useEffect(() => {
+    setFlipped(false)
+  }, [currentCard?.id])
+
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (!currentCard) return
+
+      if (event.code === 'Space') {
+        event.preventDefault()
+        setFlipped((f) => !f)
+        return
+      }
+
+      if (!flipped || isTransitioning) return
+      const selectedGrade = GRADE_BY_KEY[event.key]
+      if (selectedGrade) grade(selectedGrade)
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [currentCard, flipped, isTransitioning, grade])
+
   return {
-    currentCard: queue[0] ?? null,
+    currentCard,
     remaining: queue.length,
     loading,
     loadError,
     isTransitioning,
+    flipped,
+    toggleFlip,
     grade,
   }
 }

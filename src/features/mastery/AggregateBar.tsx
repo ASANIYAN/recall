@@ -1,5 +1,6 @@
 import type { Card } from '@/db/schema'
-import { deriveMastery, type MasteryLabel } from './deriveMastery'
+import { countByMastery } from './countByMastery'
+import type { MasteryLabel } from './deriveMastery'
 
 const ORDER: MasteryLabel[] = ['new', 'shaky', 'solid', 'mastered']
 
@@ -26,15 +27,7 @@ export function AggregateBar({
   size = 'default',
   className = '',
 }: AggregateBarProps) {
-  const counts: Record<MasteryLabel, number> = {
-    new: 0,
-    shaky: 0,
-    solid: 0,
-    mastered: 0,
-  }
-  for (const card of cards) {
-    counts[deriveMastery(card)]++
-  }
+  const counts = countByMastery(cards)
   const total = cards.length
 
   const dimensions =

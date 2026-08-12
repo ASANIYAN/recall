@@ -1,9 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { getCardsByDeck, getDeck } from '@/db/client'
-import type { Card, Deck } from '@/db/schema'
 import { AddCardDialog } from '@/features/cards/AddCardDialog'
 import { AggregateBar } from '@/features/mastery/AggregateBar'
 import { deriveMastery } from '@/features/mastery/deriveMastery'
@@ -12,29 +8,11 @@ import { FormattedContent } from '@/shared/FormattedContent'
 import { PageLoading } from '@/shared/PageLoading'
 import { PageMessage } from '@/shared/PageMessage'
 import { TextLink } from '@/shared/TextLink'
+import { useDeckDetail } from './useDeckDetail'
 
 export function DeckDetail() {
   const { deckId } = useParams<{ deckId: string }>()
-  const [deck, setDeck] = useState<Deck | null | undefined>(undefined)
-  const [cards, setCards] = useState<Card[] | null>(null)
-
-  const refresh = useCallback(async () => {
-    if (!deckId) return
-    try {
-      const [loadedDeck, loadedCards] = await Promise.all([
-        getDeck(deckId),
-        getCardsByDeck(deckId),
-      ])
-      setDeck(loadedDeck ?? null)
-      setCards(loadedCards)
-    } catch {
-      toast.error('Could not load this deck.')
-    }
-  }, [deckId])
-
-  useEffect(() => {
-    refresh()
-  }, [refresh])
+  const { deck, cards, refresh } = useDeckDetail(deckId)
 
   if (deck === undefined || !cards) return <PageLoading />
 
