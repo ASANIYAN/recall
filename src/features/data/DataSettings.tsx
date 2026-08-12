@@ -28,7 +28,7 @@ export function DataSettings() {
   return (
     <div className="min-h-svh bg-bg p-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-6">
-        <TextLink to="/">← Decks</TextLink>
+        <TextLink to="/app">← Decks</TextLink>
         <h1 className="font-display text-2xl text-ink uppercase">Data</h1>
 
         <div className="flex flex-col items-start gap-3 border-[3px] border-ink bg-surface p-5">

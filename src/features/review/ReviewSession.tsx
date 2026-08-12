@@ -22,7 +22,7 @@ export function ReviewSession({ deckId }: ReviewSessionProps) {
   } = useReviewSession(deckId)
   const [queueParent] = useAutoAnimate()
 
-  const exitTo = deckId ? `/decks/${deckId}` : '/'
+  const exitTo = deckId ? `/decks/${deckId}` : '/app'
 
   if (loading) return <PageLoading />
 

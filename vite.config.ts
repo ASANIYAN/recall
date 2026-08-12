@@ -18,7 +18,8 @@ export default defineConfig({
         description:
           'A local-first flashcard app for learning new programming languages and technical material quickly.',
         display: 'standalone',
-        start_url: '/',
+        // Launching the installed app should open the app, not the marketing page.
+        start_url: '/app',
         theme_color: '#F2E94E',
         background_color: '#F2E94E',
         icons: [

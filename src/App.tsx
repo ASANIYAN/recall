@@ -15,6 +15,14 @@ const StatsPage = lazy(() =>
   import('@/features/stats/StatsPage').then((m) => ({ default: m.StatsPage })),
 )
 
+// Motion is landing-page only, per CLAUDE.md §2 — lazy so it never loads
+// for anyone landing directly on the app itself.
+const LandingPage = lazy(() =>
+  import('@/features/landing/LandingPage').then((m) => ({
+    default: m.LandingPage,
+  })),
+)
+
 function ReviewRoute() {
   const { deckId } = useParams<{ deckId: string }>()
   return <ReviewSession deckId={deckId} />
@@ -25,7 +33,7 @@ function NotFoundRoute() {
     <PageMessage
       title="Not Found"
       message="That page does not exist."
-      linkTo="/"
+      linkTo="/app"
       linkLabel="← Back to decks"
     />
   )
@@ -35,7 +43,15 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<DeckList />} />
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<PageLoading />}>
+              <LandingPage />
+            </Suspense>
+          }
+        />
+        <Route path="/app" element={<DeckList />} />
         <Route path="/decks/:deckId" element={<DeckDetail />} />
         <Route path="/review" element={<ReviewSession />} />
         <Route path="/review/:deckId" element={<ReviewRoute />} />
