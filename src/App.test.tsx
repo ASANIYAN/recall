@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import App from './App'
 
-test('renders the empty state when nothing is due', async () => {
+test('renders the deck list empty state at the root route', async () => {
   render(<App />)
-  expect(await screen.findByText('Nothing due right now.')).toBeInTheDocument()
+  expect(await screen.findByText('No decks yet.')).toBeInTheDocument()
 })
