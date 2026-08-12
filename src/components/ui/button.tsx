@@ -5,9 +5,10 @@ import type * as React from 'react'
 import { cn } from '@/lib/utils'
 
 /**
- * Reskinned to the neubrutalist system in design-system.html's `.btn` —
- * 3px border, hard offset shadow, lift on hover, press into the shadow on
- * active. CLAUDE.md §2: shadcn is "owned source," reskinned freely.
+ * Reskinned to the app's neubrutalist system — 3px border, hard offset
+ * shadow, lift on hover, press into the shadow on active. shadcn ships
+ * this as editable source, not a locked dependency, so it's fair game
+ * to restyle directly rather than wrap or override from outside.
  */
 const buttonVariants = cva(
   "group/button inline-flex shrink-0 items-center justify-center gap-1.5 border-[3px] border-ink bg-surface px-5 py-3 font-display text-xs tracking-wide text-ink uppercase whitespace-nowrap shadow-sm transition-all duration-150 ease-out outline-none select-none hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-md active:translate-x-1 active:translate-y-1 active:shadow-none disabled:pointer-events-none disabled:opacity-50 focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",

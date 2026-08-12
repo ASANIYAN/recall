@@ -10,14 +10,13 @@ import { PageLoading } from '@/shared/PageLoading'
 import { PageMessage } from '@/shared/PageMessage'
 
 // recharts is heavy and only needed on the stats page — the review loop is
-// the daily-use core path, so it stays out of the main bundle. Same
-// reasoning CLAUDE.md §2 gives for keeping Motion out of the app bundle.
+// the daily-use core path, so it stays out of the main bundle.
 const StatsPage = lazy(() =>
   import('@/features/stats/StatsPage').then((m) => ({ default: m.StatsPage })),
 )
 
-// Motion is landing-page only, per CLAUDE.md §2 — lazy so it never loads
-// for anyone landing directly on the app itself.
+// Motion (the animation library) is landing-page only — lazy so it never
+// loads for anyone going straight to the app itself.
 const LandingPage = lazy(() =>
   import('@/features/landing/LandingPage').then((m) => ({
     default: m.LandingPage,
