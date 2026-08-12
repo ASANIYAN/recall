@@ -1,5 +1,4 @@
 import { type ChangeEvent, useRef, useState } from 'react'
-import { Link } from 'react-router'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,6 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { TextLink } from '@/shared/TextLink'
 import { buildExportPayload, downloadExport } from './exportData'
 import {
   commitImport,
@@ -83,12 +83,7 @@ export function DataSettings() {
   return (
     <div className="min-h-svh bg-bg p-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-6">
-        <Link
-          to="/"
-          className="font-mono text-ink-60 text-xs hover:text-ink active:text-ink/70"
-        >
-          ← Decks
-        </Link>
+        <TextLink to="/">← Decks</TextLink>
         <h1 className="font-display text-2xl text-ink uppercase">Data</h1>
 
         <div className="flex flex-col items-start gap-3 border-[3px] border-ink bg-surface p-5">

@@ -1,8 +1,8 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router'
 import { PageLoading } from '@/shared/PageLoading'
 import { PageMessage } from '@/shared/PageMessage'
+import { TextLink } from '@/shared/TextLink'
 import { Flashcard } from './Flashcard'
 import { GradeButtons } from './GradeButtons'
 import type { Grade } from './scheduling/learningSteps'
@@ -68,12 +68,9 @@ export function ReviewSession({ deckId }: ReviewSessionProps) {
   if (!currentCard) {
     return (
       <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-bg p-8">
-        <Link
-          to={exitTo}
-          className="self-start font-mono text-ink-60 text-xs hover:text-ink active:text-ink/70"
-        >
+        <TextLink to={exitTo} className="self-start">
           ← Exit review
-        </Link>
+        </TextLink>
         <div className="max-w-md border-2 border-dashed border-ink-35 p-10 text-center">
           <p className="mb-3 font-display text-2xl">［ ］</p>
           <p className="font-mono text-xs text-ink-60">
@@ -86,12 +83,9 @@ export function ReviewSession({ deckId }: ReviewSessionProps) {
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-bg p-8">
-      <Link
-        to={exitTo}
-        className="self-start font-mono text-ink-60 text-xs hover:text-ink active:text-ink/70"
-      >
+      <TextLink to={exitTo} className="self-start">
         ← Exit review
-      </Link>
+      </TextLink>
       <div
         ref={queueParent}
         className="flex w-full max-w-md flex-col items-center gap-6"

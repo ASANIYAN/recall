@@ -24,7 +24,7 @@ export function PageMessage({
         <p className="mb-4 font-mono text-ink-60 text-xs">{message}</p>
         <Link
           to={linkTo}
-          className="font-mono text-ink text-xs underline underline-offset-2 hover:no-underline active:text-ink-60"
+          className="font-mono text-ink text-xs underline underline-offset-2 hover:no-underline active:text-ink-60 focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-2"
         >
           {linkLabel}
         </Link>

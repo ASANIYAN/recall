@@ -11,6 +11,7 @@ import { MasteryStamp } from '@/features/mastery/MasteryStamp'
 import { FormattedContent } from '@/shared/FormattedContent'
 import { PageLoading } from '@/shared/PageLoading'
 import { PageMessage } from '@/shared/PageMessage'
+import { TextLink } from '@/shared/TextLink'
 
 export function DeckDetail() {
   const { deckId } = useParams<{ deckId: string }>()
@@ -51,24 +52,14 @@ export function DeckDetail() {
   return (
     <div className="min-h-svh bg-bg p-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-6">
-        <Link
-          to="/"
-          className="font-mono text-ink-60 text-xs hover:text-ink active:text-ink/70"
-        >
-          ← Decks
-        </Link>
+        <TextLink to="/">← Decks</TextLink>
 
         <div className="flex items-center justify-between gap-4">
           <h1 className="font-display text-2xl text-ink uppercase">
             {deck.name}
           </h1>
           <div className="flex items-center gap-3">
-            <Link
-              to={`/decks/${deck.id}/stats`}
-              className="font-mono text-ink-60 text-xs hover:text-ink active:text-ink/70"
-            >
-              Stats
-            </Link>
+            <TextLink to={`/decks/${deck.id}/stats`}>Stats</TextLink>
             <AddCardDialog
               decks={[deck]}
               defaultDeckId={deck.id}

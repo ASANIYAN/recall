@@ -7,6 +7,7 @@ import { AddCardDialog } from '@/features/cards/AddCardDialog'
 import { AggregateBar } from '@/features/mastery/AggregateBar'
 import { deriveMastery } from '@/features/mastery/deriveMastery'
 import { PageLoading } from '@/shared/PageLoading'
+import { TextLink } from '@/shared/TextLink'
 import { AddDeckDialog } from './AddDeckDialog'
 
 export function DeckList() {
@@ -55,12 +56,7 @@ export function DeckList() {
         <div className="flex items-center justify-between gap-4">
           <h1 className="font-display text-2xl text-ink uppercase">Decks</h1>
           <div className="flex items-center gap-3">
-            <Link
-              to="/data"
-              className="font-mono text-ink-60 text-xs hover:text-ink active:text-ink/70"
-            >
-              Data
-            </Link>
+            <TextLink to="/data">Data</TextLink>
             <AddDeckDialog onCreated={refresh} />
             <AddCardDialog decks={decks} onCreated={refresh} />
           </div>
@@ -74,7 +70,7 @@ export function DeckList() {
             <Link
               key={deck.id}
               to={`/decks/${deck.id}`}
-              className="flex items-center justify-between border-[3px] border-ink bg-surface px-5 py-4 shadow-sm transition-transform duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-md active:translate-x-1 active:translate-y-1 active:shadow-none"
+              className="flex items-center justify-between border-[3px] border-ink bg-surface px-5 py-4 shadow-sm transition-transform duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-md active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-2"
             >
               <div>
                 <div className="font-sans font-bold text-base text-ink">

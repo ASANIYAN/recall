@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { toast } from 'sonner'
 import { getCardsByDeck, getDeck, getSnapshotsByDeck } from '@/db/client'
 import type { Card, Deck, Snapshot } from '@/db/schema'
 import { deriveMastery } from '@/features/mastery/deriveMastery'
 import { PageLoading } from '@/shared/PageLoading'
 import { PageMessage } from '@/shared/PageMessage'
+import { TextLink } from '@/shared/TextLink'
 import { MasteryTrendChart } from './MasteryTrendChart'
 import { ProblemCardsList } from './ProblemCardsList'
 import { StatBlock } from './StatBlock'
@@ -73,12 +74,7 @@ export function StatsPage() {
   return (
     <div className="min-h-svh bg-bg p-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-6">
-        <Link
-          to={`/decks/${deck.id}`}
-          className="font-mono text-ink-60 text-xs hover:text-ink active:text-ink/70"
-        >
-          ← {deck.name}
-        </Link>
+        <TextLink to={`/decks/${deck.id}`}>← {deck.name}</TextLink>
         <h1 className="font-display text-2xl text-ink uppercase">Stats</h1>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
