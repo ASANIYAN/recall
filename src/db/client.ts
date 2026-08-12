@@ -80,6 +80,11 @@ export async function getCardsByDeck(deckId: string) {
   return db.getAllFromIndex('cards', 'deckId', deckId)
 }
 
+export async function getAllCards() {
+  const db = await getDB()
+  return db.getAll('cards')
+}
+
 /** Review-phase cards due on or before `today` (ISO date, YYYY-MM-DD). */
 export async function getDueCards(today: string) {
   const db = await getDB()

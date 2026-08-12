@@ -1,4 +1,3 @@
-import 'fake-indexeddb/auto'
 import { IDBFactory } from 'fake-indexeddb'
 import { beforeEach, describe, expect, test } from 'vitest'
 import {
