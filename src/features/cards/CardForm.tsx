@@ -1,6 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useRef } from 'react'
-import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -20,7 +17,8 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import type { Deck } from '@/db/schema'
-import { type CardFormValues, cardFormSchema } from './schema'
+import type { CardFormValues } from './schema'
+import { useCardForm } from './useCardForm'
 
 interface CardFormProps {
   decks: Deck[]
@@ -28,28 +26,17 @@ interface CardFormProps {
   onSubmit: (values: CardFormValues) => Promise<void>
 }
 
-/** Autofocus front on open, Cmd/Ctrl+Enter to submit — CLAUDE.md §7. */
 export function CardForm({ decks, defaultDeckId, onSubmit }: CardFormProps) {
-  const frontRef = useRef<HTMLTextAreaElement>(null)
-  const form = useForm<CardFormValues>({
-    resolver: zodResolver(cardFormSchema),
-    defaultValues: { deckId: defaultDeckId, front: '', back: '', tags: '' },
+  const { form, setFrontRef, handleSubmit, handleKeyDown } = useCardForm({
+    defaultDeckId,
+    onSubmit,
   })
-
-  useEffect(() => {
-    frontRef.current?.focus()
-  }, [])
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
-            event.preventDefault()
-            form.handleSubmit(onSubmit)()
-          }
-        }}
+        onSubmit={handleSubmit()}
+        onKeyDown={handleKeyDown}
         className="flex flex-col gap-5"
       >
         <FormField
@@ -88,7 +75,7 @@ export function CardForm({ decks, defaultDeckId, onSubmit }: CardFormProps) {
                   {...field}
                   ref={(el) => {
                     field.ref(el)
-                    frontRef.current = el
+                    setFrontRef(el)
                   }}
                   placeholder="What happens when a value is moved?"
                 />

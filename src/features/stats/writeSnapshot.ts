@@ -1,6 +1,6 @@
 import { getCardsByDeck, putSnapshot } from '@/db/client'
 import type { Snapshot } from '@/db/schema'
-import { deriveMastery } from '@/features/mastery/deriveMastery'
+import { computeMasterySummary } from './computeMasterySummary'
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10)
@@ -14,30 +14,15 @@ function todayISO() {
  */
 export async function writeSnapshotForDeck(deckId: string): Promise<Snapshot> {
   const cards = await getCardsByDeck(deckId)
+  const { masteryCounts } = computeMasterySummary(cards)
+
   const snapshot: Snapshot = {
     deckId,
     date: todayISO(),
-    newCount: 0,
-    shakyCount: 0,
-    solidCount: 0,
-    masteredCount: 0,
-  }
-
-  for (const card of cards) {
-    switch (deriveMastery(card)) {
-      case 'new':
-        snapshot.newCount++
-        break
-      case 'shaky':
-        snapshot.shakyCount++
-        break
-      case 'solid':
-        snapshot.solidCount++
-        break
-      case 'mastered':
-        snapshot.masteredCount++
-        break
-    }
+    newCount: masteryCounts.new,
+    shakyCount: masteryCounts.shaky,
+    solidCount: masteryCounts.solid,
+    masteredCount: masteryCounts.mastered,
   }
 
   await putSnapshot(snapshot)

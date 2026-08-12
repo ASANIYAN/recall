@@ -1,5 +1,3 @@
-import { type ChangeEvent, useRef, useState } from 'react'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -9,76 +7,23 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { TextLink } from '@/shared/TextLink'
-import { buildExportPayload, downloadExport } from './exportData'
-import {
-  commitImport,
-  computeImportSummary,
-  type ImportSummary,
-  parseImportFile,
-} from './importData'
-import type { ExportPayload } from './schema'
+import { useDataSettings } from './useDataSettings'
 
 export function DataSettings() {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [pendingImport, setPendingImport] = useState<{
-    payload: ExportPayload
-    summary: ImportSummary
-  } | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [status, setStatus] = useState<string | null>(null)
-  const [isExporting, setIsExporting] = useState(false)
-  const [isParsingFile, setIsParsingFile] = useState(false)
-  const [isImporting, setIsImporting] = useState(false)
-
-  async function handleExport() {
-    setIsExporting(true)
-    try {
-      const payload = await buildExportPayload()
-      downloadExport(payload)
-    } catch {
-      toast.error('Could not export your data.')
-    } finally {
-      setIsExporting(false)
-    }
-  }
-
-  async function handleFileSelected(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    event.target.value = ''
-    if (!file) return
-
-    setError(null)
-    setStatus(null)
-    setIsParsingFile(true)
-    try {
-      const payload = parseImportFile(await file.text())
-      const summary = await computeImportSummary(payload)
-      setPendingImport({ payload, summary })
-    } catch {
-      setError('That file is not a valid Recall export.')
-    } finally {
-      setIsParsingFile(false)
-    }
-  }
-
-  async function confirmImport() {
-    if (!pendingImport) return
-    const { summary } = pendingImport
-    setIsImporting(true)
-    try {
-      await commitImport(pendingImport.payload)
-      setStatus(
-        `Added ${summary.decksAdded} decks and ${summary.cardsAdded} cards. Updated ${summary.decksUpdated} decks and ${summary.cardsUpdated} cards.`,
-      )
-      setPendingImport(null)
-    } catch {
-      toast.error(
-        'Import failed partway through. Some records may not have been saved.',
-      )
-    } finally {
-      setIsImporting(false)
-    }
-  }
+  const {
+    fileInputRef,
+    pendingImport,
+    error,
+    status,
+    isExporting,
+    isParsingFile,
+    isImporting,
+    handleExport,
+    openFilePicker,
+    handleFileSelected,
+    confirmImport,
+    cancelImport,
+  } = useDataSettings()
 
   return (
     <div className="min-h-svh bg-bg p-8">
@@ -114,7 +59,7 @@ export function DataSettings() {
           />
           <Button
             variant="outline"
-            onClick={() => fileInputRef.current?.click()}
+            onClick={openFilePicker}
             disabled={isParsingFile}
           >
             {isParsingFile ? 'Reading File…' : 'Choose File'}
@@ -126,7 +71,7 @@ export function DataSettings() {
 
       <Dialog
         open={!!pendingImport}
-        onOpenChange={(open) => !open && setPendingImport(null)}
+        onOpenChange={(open) => !open && cancelImport()}
       >
         <DialogContent>
           <DialogHeader>
@@ -143,7 +88,7 @@ export function DataSettings() {
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={() => setPendingImport(null)}
+              onClick={cancelImport}
               disabled={isImporting}
             >
               Cancel

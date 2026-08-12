@@ -1,56 +1,28 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { useEffect, useState } from 'react'
 import { PageLoading } from '@/shared/PageLoading'
 import { PageMessage } from '@/shared/PageMessage'
 import { TextLink } from '@/shared/TextLink'
 import { Flashcard } from './Flashcard'
 import { GradeButtons } from './GradeButtons'
-import type { Grade } from './scheduling/learningSteps'
 import { useReviewSession } from './useReviewSession'
-
-const GRADE_BY_KEY: Record<string, Grade> = {
-  '1': 'again',
-  '2': 'hard',
-  '3': 'good',
-  '4': 'easy',
-}
 
 interface ReviewSessionProps {
   deckId?: string
 }
 
-/** Keyboard-first review loop: Space flips, 1–4 grade. See CLAUDE.md §7. */
 export function ReviewSession({ deckId }: ReviewSessionProps) {
-  const { currentCard, loading, loadError, isTransitioning, grade } =
-    useReviewSession(deckId)
-  const [flipped, setFlipped] = useState(false)
+  const {
+    currentCard,
+    loading,
+    loadError,
+    isTransitioning,
+    flipped,
+    toggleFlip,
+    grade,
+  } = useReviewSession(deckId)
   const [queueParent] = useAutoAnimate()
 
   const exitTo = deckId ? `/decks/${deckId}` : '/'
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional — resets flip state whenever the card changes, even though the id itself isn't read
-  useEffect(() => {
-    setFlipped(false)
-  }, [currentCard?.id])
-
-  useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (!currentCard) return
-
-      if (event.code === 'Space') {
-        event.preventDefault()
-        setFlipped((f) => !f)
-        return
-      }
-
-      if (!flipped || isTransitioning) return
-      const selectedGrade = GRADE_BY_KEY[event.key]
-      if (selectedGrade) grade(selectedGrade)
-    }
-
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [currentCard, flipped, isTransitioning, grade])
 
   if (loading) return <PageLoading />
 
@@ -94,7 +66,7 @@ export function ReviewSession({ deckId }: ReviewSessionProps) {
           key={currentCard.id}
           card={currentCard}
           flipped={flipped}
-          onFlip={() => setFlipped((f) => !f)}
+          onFlip={toggleFlip}
         />
       </div>
       {flipped && <GradeButtons onGrade={grade} disabled={isTransitioning} />}
