@@ -28,15 +28,15 @@ export function DeckDetail() {
   }
 
   return (
-    <div className="min-h-svh bg-bg p-8">
+    <div className="min-h-svh bg-bg p-4 sm:p-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-6">
         <TextLink to="/app">← Decks</TextLink>
 
-        <div className="flex items-center justify-between gap-4">
-          <h1 className="font-display text-2xl text-ink uppercase">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="wrap-break-word font-display text-2xl text-ink uppercase">
             {deck.name}
           </h1>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <TextLink to={`/decks/${deck.id}/stats`}>Stats</TextLink>
             <AddCardDialog
               decks={[deck]}
@@ -52,7 +52,7 @@ export function DeckDetail() {
         <AggregateBar cards={cards} />
 
         {cards.length === 0 ? (
-          <div className="max-w-xl border-2 border-dashed border-ink-35 p-10 text-center">
+          <div className="max-w-xl border-2 border-dashed border-ink-35 p-6 text-center sm:p-10">
             <p className="mb-3 font-display text-2xl">［ ］</p>
             <p className="font-mono text-ink-60 text-xs">
               This deck has no cards yet.
@@ -65,7 +65,7 @@ export function DeckDetail() {
                 key={card.id}
                 className="flex items-center justify-between gap-4 border-[3px] border-ink bg-surface px-5 py-4"
               >
-                <div className="font-sans text-ink text-sm">
+                <div className="min-w-0 flex-1 wrap-break-word font-sans text-ink text-sm">
                   <FormattedContent text={card.front} />
                 </div>
                 <MasteryStamp label={deriveMastery(card)} />

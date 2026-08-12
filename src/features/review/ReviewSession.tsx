@@ -39,11 +39,11 @@ export function ReviewSession({ deckId }: ReviewSessionProps) {
 
   if (!currentCard) {
     return (
-      <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-bg p-8">
+      <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-bg p-4 sm:p-8">
         <TextLink to={exitTo} className="self-start">
           ← Exit review
         </TextLink>
-        <div className="max-w-xl border-2 border-dashed border-ink-35 p-10 text-center">
+        <div className="max-w-xl border-2 border-dashed border-ink-35 p-6 text-center sm:p-10">
           <p className="mb-3 font-display text-2xl">［ ］</p>
           <p className="font-mono text-xs text-ink-60">
             Nothing due right now.
@@ -54,7 +54,7 @@ export function ReviewSession({ deckId }: ReviewSessionProps) {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-bg p-8">
+    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-bg p-4 sm:p-8">
       <TextLink to={exitTo} className="self-start">
         ← Exit review
       </TextLink>

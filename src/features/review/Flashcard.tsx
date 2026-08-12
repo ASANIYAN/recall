@@ -26,13 +26,13 @@ export function Flashcard({ card, flipped, onFlip }: FlashcardProps) {
           flipped ? '[transform:rotateY(180deg)]' : ''
         }`}
       >
-        <div className="absolute inset-0 flex flex-col justify-center gap-4 border-[3px] border-ink bg-surface p-6 shadow-md [backface-visibility:hidden]">
+        <div className="absolute inset-0 flex flex-col justify-center gap-4 overflow-y-auto wrap-break-word border-[3px] border-ink bg-surface p-4 shadow-md sm:p-6 [backface-visibility:hidden]">
           <p className="font-mono text-xs text-ink-60">Front</p>
           <div className="font-sans text-lg">
             <FormattedContent text={card.front} />
           </div>
         </div>
-        <div className="absolute inset-0 flex flex-col justify-center gap-4 border-[3px] border-ink bg-surface p-6 shadow-md [backface-visibility:hidden] [transform:rotateY(180deg)]">
+        <div className="absolute inset-0 flex flex-col justify-center gap-4 overflow-y-auto wrap-break-word border-[3px] border-ink bg-surface p-4 shadow-md sm:p-6 [backface-visibility:hidden] [transform:rotateY(180deg)]">
           <div ref={stampParent}>
             <MasteryStamp key={mastery} label={mastery} />
           </div>
