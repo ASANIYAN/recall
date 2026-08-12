@@ -24,11 +24,11 @@ export function DeckList() {
   }
 
   return (
-    <div className="min-h-svh bg-bg p-8">
+    <div className="min-h-svh bg-bg p-4 sm:p-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-4">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="font-display text-2xl text-ink uppercase">Decks</h1>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <TextLink to="/data">Data</TextLink>
             <AddDeckDialog onCreated={refresh} />
             <AddCardDialog decks={decks} onCreated={refresh} />
