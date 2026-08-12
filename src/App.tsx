@@ -8,7 +8,9 @@ import { ReviewSession } from '@/features/review/ReviewSession'
 // recharts is heavy and only needed on the stats page — the review loop is
 // the daily-use core path, so it stays out of the main bundle. Same
 // reasoning CLAUDE.md §2 gives for keeping Motion out of the app bundle.
-const StatsPage = lazy(() => import('@/features/stats/StatsPage').then((m) => ({ default: m.StatsPage })))
+const StatsPage = lazy(() =>
+  import('@/features/stats/StatsPage').then((m) => ({ default: m.StatsPage })),
+)
 
 function ReviewRoute() {
   const { deckId } = useParams<{ deckId: string }>()
