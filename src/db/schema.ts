@@ -19,7 +19,7 @@ export interface Card {
   phase: CardPhase
   /** Index into the learning-step sequence. Meaningful only in the learning phase. */
   learningStep: number
-  /** Days, not a timestamp. See CLAUDE.md §3. */
+  /** Days, not a timestamp — storing "when the last review happened" would force re-deriving the gap via subtraction every time. */
   interval: number
   easeFactor: number
   /** ISO date (YYYY-MM-DD). Review-phase cards only. */
