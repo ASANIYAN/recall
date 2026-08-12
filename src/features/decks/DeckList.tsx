@@ -48,7 +48,13 @@ export function DeckList() {
       <div className="mx-auto flex max-w-2xl flex-col gap-4">
         <div className="flex items-center justify-between gap-4">
           <h1 className="font-display text-2xl text-ink uppercase">Decks</h1>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
+            <Link
+              to="/data"
+              className="font-mono text-ink-60 text-xs hover:text-ink"
+            >
+              Data
+            </Link>
             <AddDeckDialog onCreated={refresh} />
             <AddCardDialog decks={decks} onCreated={refresh} />
           </div>

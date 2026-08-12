@@ -11,7 +11,10 @@ describe('parseTags', () => {
   })
 
   test('drops empty entries from stray commas', () => {
-    expect(parseTags('ownership,, borrowing,')).toEqual(['ownership', 'borrowing'])
+    expect(parseTags('ownership,, borrowing,')).toEqual([
+      'ownership',
+      'borrowing',
+    ])
   })
 
   test('returns undefined for empty or whitespace-only input', () => {
