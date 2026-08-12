@@ -27,5 +27,6 @@ dist-ssr
 PLAN.md
 CLAUDE.md
 design-system.html
+landing-variations/
 .vercel
 .env*

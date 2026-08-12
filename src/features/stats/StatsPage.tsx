@@ -19,7 +19,7 @@ export function StatsPage() {
       <PageMessage
         title="Deck Not Found"
         message="This deck does not exist, or was deleted."
-        linkTo="/"
+        linkTo="/app"
         linkLabel="← Back to decks"
       />
     )

@@ -21,7 +21,7 @@ export function DeckDetail() {
       <PageMessage
         title="Deck Not Found"
         message="This deck does not exist, or was deleted."
-        linkTo="/"
+        linkTo="/app"
         linkLabel="← Back to decks"
       />
     )
@@ -30,7 +30,7 @@ export function DeckDetail() {
   return (
     <div className="min-h-svh bg-bg p-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-6">
-        <TextLink to="/">← Decks</TextLink>
+        <TextLink to="/app">← Decks</TextLink>
 
         <div className="flex items-center justify-between gap-4">
           <h1 className="font-display text-2xl text-ink uppercase">
