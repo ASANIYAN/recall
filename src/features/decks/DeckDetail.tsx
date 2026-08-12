@@ -41,7 +41,13 @@ export function DeckDetail() {
           <h1 className="font-display text-2xl text-ink uppercase">
             {deck.name}
           </h1>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-3">
+            <Link
+              to={`/decks/${deck.id}/stats`}
+              className="font-mono text-ink-60 text-xs hover:text-ink"
+            >
+              Stats
+            </Link>
             <AddCardDialog
               decks={[deck]}
               defaultDeckId={deck.id}
