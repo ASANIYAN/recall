@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 import {
   getAllCards,
   getCardsByDeck,
@@ -30,6 +31,7 @@ function interleave(a: Card[], b: Card[]): Card[] {
 export function useReviewSession(deckId?: string) {
   const [queue, setQueue] = useState<Card[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(false)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const queueRef = useRef<Card[]>([])
   const learningTimers = useRef(
@@ -45,18 +47,28 @@ export function useReviewSession(deckId?: string) {
 
     async function load() {
       setLoading(true)
-      const today = todayISO()
-      const allCards = deckId
-        ? await getCardsByDeck(deckId)
-        : await getAllCards()
-      const learningCards = allCards.filter((card) => card.phase === 'learning')
-      const dueReviewCards = deckId
-        ? (await getDueCards(today)).filter((card) => card.deckId === deckId)
-        : await getDueCards(today)
+      setLoadError(false)
+      try {
+        const today = todayISO()
+        const allCards = deckId
+          ? await getCardsByDeck(deckId)
+          : await getAllCards()
+        const learningCards = allCards.filter(
+          (card) => card.phase === 'learning',
+        )
+        const dueReviewCards = deckId
+          ? (await getDueCards(today)).filter((card) => card.deckId === deckId)
+          : await getDueCards(today)
 
-      if (!cancelled) {
-        setQueue(interleave(learningCards, dueReviewCards))
-        setLoading(false)
+        if (!cancelled) {
+          setQueue(interleave(learningCards, dueReviewCards))
+          setLoading(false)
+        }
+      } catch {
+        if (!cancelled) {
+          setLoadError(true)
+          setLoading(false)
+        }
       }
     }
 
@@ -91,7 +103,14 @@ export function useReviewSession(deckId?: string) {
         ...result,
         nextShowDate: result.nextShowDate,
       }
-      await updateCard(updated)
+
+      try {
+        await updateCard(updated)
+      } catch {
+        toast.error('Could not save that grade. Try again.')
+        setIsTransitioning(false)
+        return
+      }
 
       // Show the updated mastery state on the current card immediately.
       setQueue((prev) => [updated, ...prev.slice(1)])
@@ -117,6 +136,7 @@ export function useReviewSession(deckId?: string) {
     currentCard: queue[0] ?? null,
     remaining: queue.length,
     loading,
+    loadError,
     isTransitioning,
     grade,
   }

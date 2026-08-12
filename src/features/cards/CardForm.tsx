@@ -25,7 +25,7 @@ import { type CardFormValues, cardFormSchema } from './schema'
 interface CardFormProps {
   decks: Deck[]
   defaultDeckId: string
-  onSubmit: (values: CardFormValues) => void
+  onSubmit: (values: CardFormValues) => Promise<void>
 }
 
 /** Autofocus front on open, Cmd/Ctrl+Enter to submit — CLAUDE.md §7. */
@@ -129,8 +129,13 @@ export function CardForm({ decks, defaultDeckId, onSubmit }: CardFormProps) {
           )}
         />
 
-        <Button type="submit" variant="violet" className="self-start">
-          Save Card
+        <Button
+          type="submit"
+          variant="violet"
+          className="self-start"
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? 'Saving…' : 'Save Card'}
         </Button>
       </form>
     </Form>

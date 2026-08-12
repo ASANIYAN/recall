@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router'
+import { toast } from 'sonner'
 import { getAllCards, getAllDecks } from '@/db/client'
 import type { Card, Deck } from '@/db/schema'
 import { AddCardDialog } from '@/features/cards/AddCardDialog'
 import { AggregateBar } from '@/features/mastery/AggregateBar'
 import { deriveMastery } from '@/features/mastery/deriveMastery'
+import { PageLoading } from '@/shared/PageLoading'
 import { AddDeckDialog } from './AddDeckDialog'
 
 export function DeckList() {
@@ -12,24 +14,28 @@ export function DeckList() {
   const [cardsByDeck, setCardsByDeck] = useState<Record<string, Card[]>>({})
 
   const refresh = useCallback(async () => {
-    const [allDecks, allCards] = await Promise.all([
-      getAllDecks(),
-      getAllCards(),
-    ])
-    const grouped: Record<string, Card[]> = {}
-    for (const card of allCards) {
-      if (!grouped[card.deckId]) grouped[card.deckId] = []
-      grouped[card.deckId].push(card)
+    try {
+      const [allDecks, allCards] = await Promise.all([
+        getAllDecks(),
+        getAllCards(),
+      ])
+      const grouped: Record<string, Card[]> = {}
+      for (const card of allCards) {
+        if (!grouped[card.deckId]) grouped[card.deckId] = []
+        grouped[card.deckId].push(card)
+      }
+      setDecks(allDecks)
+      setCardsByDeck(grouped)
+    } catch {
+      toast.error('Could not load your decks.')
     }
-    setDecks(allDecks)
-    setCardsByDeck(grouped)
   }, [])
 
   useEffect(() => {
     refresh()
   }, [refresh])
 
-  if (!decks) return null
+  if (!decks) return <PageLoading />
 
   if (decks.length === 0) {
     return (
@@ -51,7 +57,7 @@ export function DeckList() {
           <div className="flex items-center gap-3">
             <Link
               to="/data"
-              className="font-mono text-ink-60 text-xs hover:text-ink"
+              className="font-mono text-ink-60 text-xs hover:text-ink active:text-ink/70"
             >
               Data
             </Link>
@@ -68,7 +74,7 @@ export function DeckList() {
             <Link
               key={deck.id}
               to={`/decks/${deck.id}`}
-              className="flex items-center justify-between border-[3px] border-ink bg-surface px-5 py-4 shadow-sm transition-transform duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-md"
+              className="flex items-center justify-between border-[3px] border-ink bg-surface px-5 py-4 shadow-sm transition-transform duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-md active:translate-x-1 active:translate-y-1 active:shadow-none"
             >
               <div>
                 <div className="font-sans font-bold text-base text-ink">

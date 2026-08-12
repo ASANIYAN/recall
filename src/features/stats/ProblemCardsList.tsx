@@ -28,7 +28,7 @@ export function ProblemCardsList({ cards }: ProblemCardsListProps) {
         <Link
           key={card.id}
           to={`/review/${card.deckId}`}
-          className="flex items-center justify-between gap-4 border-[3px] border-ink bg-surface px-5 py-4 shadow-sm transition-transform duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-md"
+          className="flex items-center justify-between gap-4 border-[3px] border-ink bg-surface px-5 py-4 shadow-sm transition-transform duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-md active:translate-x-1 active:translate-y-1 active:shadow-none"
         >
           <p className="font-sans text-ink text-sm">{card.front}</p>
           <span className="shrink-0 font-mono text-ink-60 text-xs uppercase">

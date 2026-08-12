@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -47,7 +48,12 @@ export function AddCardDialog({
       easeFactor: INITIAL_EASE_FACTOR,
       lapses: 0,
     }
-    await createCard(card)
+    try {
+      await createCard(card)
+    } catch {
+      toast.error('Could not save that card. Try again.')
+      return
+    }
     setLastUsedDeckId(values.deckId)
     onCreated?.(card)
     setOpen(false)
