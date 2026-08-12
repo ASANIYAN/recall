@@ -14,7 +14,7 @@ export function DeckList() {
   if (deckSummaries.length === 0) {
     return (
       <div className="flex min-h-svh items-center justify-center bg-bg p-8">
-        <div className="max-w-md border-2 border-dashed border-ink-35 p-10 text-center">
+        <div className="max-w-xl border-2 border-dashed border-ink-35 p-10 text-center">
           <p className="mb-3 font-display text-2xl">［ ］</p>
           <p className="mb-4 font-mono text-ink-60 text-xs">No decks yet.</p>
           <AddDeckDialog onCreated={refresh} />

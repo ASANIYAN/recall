@@ -52,7 +52,7 @@ export function DeckDetail() {
         <AggregateBar cards={cards} />
 
         {cards.length === 0 ? (
-          <div className="max-w-md border-2 border-dashed border-ink-35 p-10 text-center">
+          <div className="max-w-xl border-2 border-dashed border-ink-35 p-10 text-center">
             <p className="mb-3 font-display text-2xl">［ ］</p>
             <p className="font-mono text-ink-60 text-xs">
               This deck has no cards yet.

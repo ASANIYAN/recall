@@ -43,7 +43,7 @@ export function ReviewSession({ deckId }: ReviewSessionProps) {
         <TextLink to={exitTo} className="self-start">
           ← Exit review
         </TextLink>
-        <div className="max-w-md border-2 border-dashed border-ink-35 p-10 text-center">
+        <div className="max-w-xl border-2 border-dashed border-ink-35 p-10 text-center">
           <p className="mb-3 font-display text-2xl">［ ］</p>
           <p className="font-mono text-xs text-ink-60">
             Nothing due right now.
