@@ -43,12 +43,12 @@ const FEATURES = [
   {
     n: '01',
     title: 'Keyboard-first review',
-    body: 'Space to flip, 1–4 to grade. Hundreds of reps a week, no mouse.',
+    body: 'Space flips. 1–4 grades. No mouse, ever.',
   },
   {
     n: '02',
     title: 'Code-aware cards',
-    body: 'Fenced code blocks render in real monospace, not mush.',
+    body: 'Fenced code blocks render in real monospace.',
   },
   {
     n: '03',
@@ -82,18 +82,17 @@ export function LandingPage() {
           {...fadeUp(0.05)}
           className="mx-auto mb-5 max-w-3xl text-balance font-display text-4xl text-ink uppercase leading-[1.05] sm:text-5xl"
         >
-          Flashcards that track what you've{' '}
+          Flashcards that measure what you've{' '}
           <span className="inline-block -rotate-1 bg-ink px-2.5 py-0.5 text-surface">
-            actually
-          </span>{' '}
-          learned
+            mastered
+          </span>
         </motion.h1>
         <motion.p
           {...fadeUp(0.1)}
           className="mx-auto mb-9 max-w-md font-sans text-ink-60 text-lg"
         >
-          No streaks. No points. Just four honest states — New, Shaky, Solid,
-          Mastered — and a review loop fast enough to live in your keyboard.
+          Not how often you showed up. No streaks, no points — just four honest
+          states based on real review history.
         </motion.p>
         <motion.div
           {...fadeUp(0.15)}
