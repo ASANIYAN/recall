@@ -42,7 +42,6 @@ export async function computeImportSummary(
  * Upsert by ID — existing records are updated, new ones added, nothing is
  * deleted. `updateDeck`/`updateCard` both use IndexedDB `put`, which already
  * handles insert-or-update, so the same calls cover adds and updates alike.
- * See CLAUDE.md §7.
  */
 export async function commitImport(payload: ExportPayload): Promise<void> {
   await Promise.all(payload.decks.map(updateDeck))

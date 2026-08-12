@@ -24,7 +24,7 @@ function todayISO() {
   return new Date().toISOString().slice(0, 10)
 }
 
-/** Alternates two arrays so the queue isn't all-learning-then-all-review. See CLAUDE.md §5. */
+/** Alternates two arrays so the queue isn't all-learning-then-all-review — keeps a session from feeling monotonous. */
 function interleave(a: Card[], b: Card[]): Card[] {
   const result: Card[] = []
   const max = Math.max(a.length, b.length)
@@ -35,7 +35,7 @@ function interleave(a: Card[], b: Card[]): Card[] {
   return result
 }
 
-/** Keyboard-first review loop: Space flips, 1–4 grade. See CLAUDE.md §7. */
+/** Keyboard-first review loop: Space flips, 1–4 grade. */
 export function useReviewSession(deckId?: string) {
   const [queue, setQueue] = useState<Card[]>([])
   const [loading, setLoading] = useState(true)

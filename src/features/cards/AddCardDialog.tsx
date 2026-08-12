@@ -17,7 +17,7 @@ interface AddCardDialogProps {
   onCreated?: (card: Card) => void
 }
 
-/** Modal, not a route — keeps the person in context. CLAUDE.md §7. */
+/** Modal, not a route — keeps the person in context (deck list or mid-session). */
 export function AddCardDialog({
   decks,
   defaultDeckId,

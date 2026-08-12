@@ -3,7 +3,7 @@ import type { MasteryLabel } from './deriveMastery'
 
 /**
  * Rotation reads as "stamped" — New stays dashed/unrotated (hasn't earned
- * a stamp yet), Shaky/Solid/Mastered get a slight rotation. See CLAUDE.md §8.
+ * a stamp yet), Shaky/Solid/Mastered get a slight rotation.
  */
 const stampVariants = cva(
   'inline-flex items-center gap-1.5 border-2 border-ink px-3 py-1.5 font-display text-[11px] uppercase',

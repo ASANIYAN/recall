@@ -9,7 +9,7 @@ interface UseCardFormOptions {
   onSubmit: (values: CardFormValues) => Promise<void>
 }
 
-/** Autofocus front on open, Cmd/Ctrl+Enter to submit — CLAUDE.md §7. */
+/** Autofocus front on open, Cmd/Ctrl+Enter to submit. */
 export function useCardForm({ defaultDeckId, onSubmit }: UseCardFormOptions) {
   const frontRef = useRef<HTMLTextAreaElement>(null)
   const form = useForm<CardFormValues>({

@@ -13,8 +13,9 @@ export interface DeriveMasteryInput {
 }
 
 /**
- * Mastery is a derived label, never a stored field (CLAUDE.md §3).
- * A learning-phase card with lapses > 0 has graduated and regressed
+ * Mastery is a derived label, never a stored field — this is what
+ * guarantees the visual state can't drift out of sync with the underlying
+ * scheduling data. A learning-phase card with lapses > 0 has graduated and regressed
  * before — it reads as "shaky", not "new". Lapses only affects the label
  * while still in that learning-phase episode; once re-graduated, the
  * label is interval-based again, ignoring older lapses.

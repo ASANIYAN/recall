@@ -6,7 +6,7 @@ interface FormattedContentProps {
 
 /**
  * Renders plain text with fenced ``` code blocks as monospace blocks.
- * Minimal on purpose — CLAUDE.md §3 asks for "at least" fenced code block
+ * Minimal on purpose: card content only needs "at least" fenced code block
  * support, not a full markdown renderer, so no parser dependency is added.
  */
 export function FormattedContent({ text }: FormattedContentProps) {

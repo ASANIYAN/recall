@@ -27,7 +27,7 @@ interface GradeButtonsProps {
   disabled?: boolean
 }
 
-/** Keyboard-first: 1–4 map to Again/Hard/Good/Easy — see CLAUDE.md §7. */
+/** Keyboard-first: 1–4 map to Again/Hard/Good/Easy. */
 export function GradeButtons({ onGrade, disabled }: GradeButtonsProps) {
   return (
     <div className="flex w-full max-w-md gap-2">

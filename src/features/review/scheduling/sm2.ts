@@ -18,7 +18,6 @@ export interface ReviewResult {
  * SM-2-style interval/easeFactor math for a review-phase card.
  * Again is not a ReviewGrade: it regresses the card to the learning phase
  * instead, which the caller (gradeCard.ts) handles directly.
- * See CLAUDE.md §4 for the grade table this implements.
  */
 export function applyReviewGrade(
   currentInterval: number,

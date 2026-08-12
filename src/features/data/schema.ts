@@ -21,7 +21,7 @@ const cardSchema = z.object({
   lapses: z.number(),
 })
 
-/** Matches CLAUDE.md §7: export covers decks + cards, not snapshots. */
+/** Export covers decks + cards. Snapshots are excluded — they're derived stats history, not user content. */
 export const exportPayloadSchema = z.object({
   decks: z.array(deckSchema),
   cards: z.array(cardSchema),

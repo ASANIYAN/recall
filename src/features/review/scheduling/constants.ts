@@ -1,4 +1,4 @@
-/** Named constants for the SM-2-style scheduling algorithm — see CLAUDE.md §4. */
+/** Named constants for the SM-2-style scheduling algorithm — the standard values, shipped as v1 defaults, not placeholders. */
 
 export const INITIAL_EASE_FACTOR = 2.5
 export const EASE_FACTOR_FLOOR = 1.3
@@ -11,6 +11,6 @@ export const EASY_EASE_DELTA = 0.15
 export const HARD_INTERVAL_MULTIPLIER = 1.2
 export const EASY_INTERVAL_MULTIPLIER = 1.3
 
-/** Mastery thresholds, in days. Tunable, not architectural — see CLAUDE.md §4. */
+/** Mastery thresholds, in days. Tunable, not architectural. */
 export const SHAKY_MAX_DAYS = 7
 export const SOLID_MAX_DAYS = 21

@@ -21,7 +21,7 @@ export interface GradeCardResult {
   learningStep: number
   interval: number
   easeFactor: number
-  /** Set only when the result is review-phase — see CLAUDE.md §3. */
+  /** Set only when the result is review-phase — learning-phase due-ness is tracked in-memory, not persisted. */
   nextShowDate?: string
   lapses: number
 }

@@ -1,6 +1,6 @@
 export type Grade = 'again' | 'hard' | 'good' | 'easy'
 
-/** Same-day step sequence: 1 min, 10 min, 1 day. See CLAUDE.md §4. */
+/** Same-day step sequence: 1 min, 10 min, 1 day. */
 export const LEARNING_STEP_MINUTES = [1, 10, 1440] as const
 
 export interface LearningStepResult {
@@ -10,9 +10,9 @@ export interface LearningStepResult {
 
 /**
  * Advances a learning-phase card's step per its grade.
- * Again resets to the first step. Hard repeats the current step —
- * CLAUDE.md §4 only defines Hard for the review phase, so learning-phase
- * Hard is treated as "struggled, not wrong": no advance, no reset.
+ * Again resets to the first step. Hard repeats the current step — the
+ * review-phase grade table doesn't define what Hard means during
+ * learning, so it's treated as "struggled, not wrong": no advance, no reset.
  * Good/Easy advance a step; clearing the last step graduates the card.
  */
 export function advanceLearningStep(

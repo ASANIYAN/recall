@@ -5,7 +5,7 @@ import { Flashcard } from '@/features/review/Flashcard'
 import { GradeButtons } from '@/features/review/GradeButtons'
 import { useLandingDemo } from './useLandingDemo'
 
-/** Hard/snappy per CLAUDE.md §8 — overrides Motion's spring default everywhere on this page. */
+/** Hard/snappy, not bouncy — overrides Motion's spring default everywhere on this page, to match the rest of the app's motion. */
 const EASE_OUT = { type: 'tween', ease: 'easeOut', duration: 0.2 } as const
 
 function fadeUp(delay = 0) {

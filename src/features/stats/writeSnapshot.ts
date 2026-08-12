@@ -10,7 +10,7 @@ function todayISO() {
  * Writes one snapshot per deck per day — safe to call every time the deck
  * is viewed. `putSnapshot` upserts on `deckId` + `date`, so repeated calls
  * on the same day just overwrite with the latest counts instead of
- * accumulating duplicates. See CLAUDE.md §3.
+ * accumulating duplicates.
  */
 export async function writeSnapshotForDeck(deckId: string): Promise<Snapshot> {
   const cards = await getCardsByDeck(deckId)

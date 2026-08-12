@@ -20,7 +20,8 @@ interface AggregateBarProps {
 
 /**
  * Deck-level mastery breakdown. Segment order is always
- * New → Shaky → Solid → Mastered, left to right — CLAUDE.md §8/design-system.html.
+ * New → Shaky → Solid → Mastered, left to right, so growth reads as
+ * "filling toward the right."
  */
 export function AggregateBar({
   cards,
