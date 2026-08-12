@@ -1,36 +1,32 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { getCardsByDeck, getDeck } from '@/db/client'
 import type { Card, Deck } from '@/db/schema'
+import { AddCardDialog } from '@/features/cards/AddCardDialog'
 import { AggregateBar } from '@/features/mastery/AggregateBar'
 import { deriveMastery } from '@/features/mastery/deriveMastery'
 import { MasteryStamp } from '@/features/mastery/MasteryStamp'
+import { FormattedContent } from '@/shared/FormattedContent'
 
 export function DeckDetail() {
   const { deckId } = useParams<{ deckId: string }>()
   const [deck, setDeck] = useState<Deck | null>(null)
   const [cards, setCards] = useState<Card[] | null>(null)
 
-  useEffect(() => {
+  const refresh = useCallback(async () => {
     if (!deckId) return
-    let cancelled = false
-
-    async function load() {
-      const [loadedDeck, loadedCards] = await Promise.all([
-        getDeck(deckId as string),
-        getCardsByDeck(deckId as string),
-      ])
-      if (cancelled) return
-      setDeck(loadedDeck ?? null)
-      setCards(loadedCards)
-    }
-
-    load()
-    return () => {
-      cancelled = true
-    }
+    const [loadedDeck, loadedCards] = await Promise.all([
+      getDeck(deckId),
+      getCardsByDeck(deckId),
+    ])
+    setDeck(loadedDeck ?? null)
+    setCards(loadedCards)
   }, [deckId])
+
+  useEffect(() => {
+    refresh()
+  }, [refresh])
 
   if (!deck || !cards) return null
 
@@ -45,9 +41,16 @@ export function DeckDetail() {
           <h1 className="font-display text-2xl text-ink uppercase">
             {deck.name}
           </h1>
-          <Button variant="violet" asChild>
-            <Link to={`/review/${deck.id}`}>Study now</Link>
-          </Button>
+          <div className="flex gap-2">
+            <AddCardDialog
+              decks={[deck]}
+              defaultDeckId={deck.id}
+              onCreated={refresh}
+            />
+            <Button variant="violet" asChild>
+              <Link to={`/review/${deck.id}`}>Study now</Link>
+            </Button>
+          </div>
         </div>
 
         <AggregateBar cards={cards} />
@@ -66,7 +69,9 @@ export function DeckDetail() {
                 key={card.id}
                 className="flex items-center justify-between gap-4 border-[3px] border-ink bg-surface px-5 py-4"
               >
-                <p className="font-sans text-ink text-sm">{card.front}</p>
+                <div className="font-sans text-ink text-sm">
+                  <FormattedContent text={card.front} />
+                </div>
                 <MasteryStamp label={deriveMastery(card)} />
               </div>
             ))}

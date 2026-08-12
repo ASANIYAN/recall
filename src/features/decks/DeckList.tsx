@@ -1,38 +1,33 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router'
 import { getAllCards, getAllDecks } from '@/db/client'
 import type { Card, Deck } from '@/db/schema'
+import { AddCardDialog } from '@/features/cards/AddCardDialog'
 import { AggregateBar } from '@/features/mastery/AggregateBar'
 import { deriveMastery } from '@/features/mastery/deriveMastery'
+import { AddDeckDialog } from './AddDeckDialog'
 
 export function DeckList() {
   const [decks, setDecks] = useState<Deck[] | null>(null)
   const [cardsByDeck, setCardsByDeck] = useState<Record<string, Card[]>>({})
 
-  useEffect(() => {
-    let cancelled = false
-
-    async function load() {
-      const [allDecks, allCards] = await Promise.all([
-        getAllDecks(),
-        getAllCards(),
-      ])
-      if (cancelled) return
-
-      const grouped: Record<string, Card[]> = {}
-      for (const card of allCards) {
-        if (!grouped[card.deckId]) grouped[card.deckId] = []
-        grouped[card.deckId].push(card)
-      }
-      setDecks(allDecks)
-      setCardsByDeck(grouped)
+  const refresh = useCallback(async () => {
+    const [allDecks, allCards] = await Promise.all([
+      getAllDecks(),
+      getAllCards(),
+    ])
+    const grouped: Record<string, Card[]> = {}
+    for (const card of allCards) {
+      if (!grouped[card.deckId]) grouped[card.deckId] = []
+      grouped[card.deckId].push(card)
     }
-
-    load()
-    return () => {
-      cancelled = true
-    }
+    setDecks(allDecks)
+    setCardsByDeck(grouped)
   }, [])
+
+  useEffect(() => {
+    refresh()
+  }, [refresh])
 
   if (!decks) return null
 
@@ -41,7 +36,8 @@ export function DeckList() {
       <div className="flex min-h-svh items-center justify-center bg-bg p-8">
         <div className="max-w-md border-2 border-dashed border-ink-35 p-10 text-center">
           <p className="mb-3 font-display text-2xl">［ ］</p>
-          <p className="font-mono text-xs text-ink-60">No decks yet.</p>
+          <p className="mb-4 font-mono text-ink-60 text-xs">No decks yet.</p>
+          <AddDeckDialog onCreated={refresh} />
         </div>
       </div>
     )
@@ -50,7 +46,13 @@ export function DeckList() {
   return (
     <div className="min-h-svh bg-bg p-8">
       <div className="mx-auto flex max-w-2xl flex-col gap-4">
-        <h1 className="font-display text-2xl text-ink uppercase">Decks</h1>
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="font-display text-2xl text-ink uppercase">Decks</h1>
+          <div className="flex gap-2">
+            <AddDeckDialog onCreated={refresh} />
+            <AddCardDialog decks={decks} onCreated={refresh} />
+          </div>
+        </div>
         {decks.map((deck) => {
           const cards = cardsByDeck[deck.id] ?? []
           const masteredCount = cards.filter(

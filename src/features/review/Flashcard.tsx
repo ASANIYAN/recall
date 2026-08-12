@@ -2,6 +2,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import type { Card } from '@/db/schema'
 import { deriveMastery } from '@/features/mastery/deriveMastery'
 import { MasteryStamp } from '@/features/mastery/MasteryStamp'
+import { FormattedContent } from '@/shared/FormattedContent'
 
 interface FlashcardProps {
   card: Card
@@ -27,13 +28,17 @@ export function Flashcard({ card, flipped, onFlip }: FlashcardProps) {
       >
         <div className="absolute inset-0 flex flex-col justify-center gap-4 border-[3px] border-ink bg-surface p-6 shadow-md [backface-visibility:hidden]">
           <p className="font-mono text-xs text-ink-60">Front</p>
-          <p className="font-sans text-lg">{card.front}</p>
+          <div className="font-sans text-lg">
+            <FormattedContent text={card.front} />
+          </div>
         </div>
         <div className="absolute inset-0 flex flex-col justify-center gap-4 border-[3px] border-ink bg-surface p-6 shadow-md [backface-visibility:hidden] [transform:rotateY(180deg)]">
           <div ref={stampParent}>
             <MasteryStamp key={mastery} label={mastery} />
           </div>
-          <p className="font-sans text-lg">{card.back}</p>
+          <div className="font-sans text-lg">
+            <FormattedContent text={card.back} />
+          </div>
         </div>
       </div>
     </button>
