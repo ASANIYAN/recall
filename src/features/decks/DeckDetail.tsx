@@ -4,7 +4,9 @@ import { AddCardDialog } from '@/features/cards/AddCardDialog'
 import { AggregateBar } from '@/features/mastery/AggregateBar'
 import { deriveMastery } from '@/features/mastery/deriveMastery'
 import { MasteryStamp } from '@/features/mastery/MasteryStamp'
+import { EmptyState } from '@/shared/EmptyState'
 import { FormattedContent } from '@/shared/FormattedContent'
+import { ListItemCard } from '@/shared/ListItemCard'
 import { PageLoading } from '@/shared/PageLoading'
 import { PageMessage } from '@/shared/PageMessage'
 import { TextLink } from '@/shared/TextLink'
@@ -52,24 +54,16 @@ export function DeckDetail() {
         <AggregateBar cards={cards} />
 
         {cards.length === 0 ? (
-          <div className="max-w-xl border-2 border-dashed border-ink-35 p-6 text-center sm:p-10">
-            <p className="mb-3 font-display text-2xl">［ ］</p>
-            <p className="font-mono text-ink-60 text-xs">
-              This deck has no cards yet.
-            </p>
-          </div>
+          <EmptyState message="This deck has no cards yet." />
         ) : (
           <div className="flex flex-col gap-3">
             {cards.map((card) => (
-              <div
-                key={card.id}
-                className="flex items-center justify-between gap-4 border-[3px] border-ink bg-surface px-5 py-4"
-              >
+              <ListItemCard key={card.id} className="gap-4">
                 <div className="min-w-0 flex-1 wrap-break-word font-sans text-ink text-sm">
                   <FormattedContent text={card.front} />
                 </div>
                 <MasteryStamp label={deriveMastery(card)} />
-              </div>
+              </ListItemCard>
             ))}
           </div>
         )}

@@ -1,13 +1,6 @@
-import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+import { Form } from '@/components/ui/form'
+import { FormTextField } from '@/shared/form/FormTextField'
+import { SubmitButton } from '@/shared/form/SubmitButton'
 import type { DeckFormValues } from './schema'
 import { useDeckForm } from './useDeckForm'
 
@@ -21,34 +14,17 @@ export function DeckForm({ onSubmit }: DeckFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit()} className="flex flex-col gap-5">
-        <FormField
+        <FormTextField
           control={form.control}
           name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  ref={(el) => {
-                    field.ref(el)
-                    setNameRef(el)
-                  }}
-                  placeholder="Rust Fundamentals"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Name"
+          placeholder="Rust Fundamentals"
+          fieldRef={setNameRef}
         />
-        <Button
-          type="submit"
-          variant="violet"
-          className="self-start"
-          disabled={form.formState.isSubmitting}
-        >
-          {form.formState.isSubmitting ? 'Saving…' : 'Save Deck'}
-        </Button>
+        <SubmitButton
+          isSubmitting={form.formState.isSubmitting}
+          label="Save Deck"
+        />
       </form>
     </Form>
   )

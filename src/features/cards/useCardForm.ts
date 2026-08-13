@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { KeyboardEvent } from 'react'
-import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
+import { useAutoFocusRef } from '@/shared/form/useAutoFocusRef'
 import { type CardFormValues, cardFormSchema } from './schema'
 
 interface UseCardFormOptions {
@@ -11,19 +11,11 @@ interface UseCardFormOptions {
 
 /** Autofocus front on open, Cmd/Ctrl+Enter to submit. */
 export function useCardForm({ defaultDeckId, onSubmit }: UseCardFormOptions) {
-  const frontRef = useRef<HTMLTextAreaElement>(null)
+  const setFrontRef = useAutoFocusRef<HTMLTextAreaElement>()
   const form = useForm<CardFormValues>({
     resolver: zodResolver(cardFormSchema),
     defaultValues: { deckId: defaultDeckId, front: '', back: '', tags: '' },
   })
-
-  useEffect(() => {
-    frontRef.current?.focus()
-  }, [])
-
-  function setFrontRef(el: HTMLTextAreaElement | null) {
-    frontRef.current = el
-  }
 
   function handleSubmit() {
     return form.handleSubmit(onSubmit)
