@@ -20,22 +20,22 @@ const STAMPS = [
   {
     label: 'New',
     className: 'border-dashed bg-surface text-ink-60',
-    caption: "Hasn't earned a stamp yet.",
+    caption: 'Never graded, or still in its first few reviews.',
   },
   {
     label: 'Shaky',
     className: 'bg-pink-tint text-shaky-text -rotate-2',
-    caption: 'Graduated, but still fragile.',
+    caption: 'Just graduated, or slipped on a recent review.',
   },
   {
     label: 'Solid',
     className: 'bg-violet-tint text-solid-text rotate-1',
-    caption: 'Reliable, not yet automatic.',
+    caption: 'Several correct reviews in a row, no recent slip.',
   },
   {
     label: 'Mastered',
     className: 'bg-cyan-tint text-mastered-text -rotate-1',
-    caption: 'You know this cold.',
+    caption: 'A long run of correct reviews. One slip drops it back to Shaky.',
   },
 ]
 
