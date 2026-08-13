@@ -1,8 +1,7 @@
-import { useState } from 'react'
-import { toast } from 'sonner'
 import { createCard } from '@/db/client'
 import type { Card, Deck } from '@/db/schema'
 import { INITIAL_EASE_FACTOR } from '@/features/review/scheduling/constants'
+import { useCreateEntityDialog } from '@/shared/form/useCreateEntityDialog'
 import { getLastUsedDeckId, setLastUsedDeckId } from '@/shared/lastUsedDeck'
 import type { CardFormValues } from './schema'
 import { parseTags } from './schema'
@@ -19,13 +18,14 @@ export function useAddCardDialog({
   defaultDeckId,
   onCreated,
 }: UseAddCardDialogOptions) {
-  const [open, setOpen] = useState(false)
-
   const initialDeckId =
     defaultDeckId ?? getLastUsedDeckId() ?? decks[0]?.id ?? ''
 
-  async function handleSubmit(values: CardFormValues) {
-    const card: Card = {
+  const { open, setOpen, handleSubmit } = useCreateEntityDialog<
+    CardFormValues,
+    Card
+  >({
+    build: (values) => ({
       id: crypto.randomUUID(),
       deckId: values.deckId,
       front: values.front,
@@ -37,17 +37,14 @@ export function useAddCardDialog({
       interval: 0,
       easeFactor: INITIAL_EASE_FACTOR,
       lapses: 0,
-    }
-    try {
-      await createCard(card)
-    } catch {
-      toast.error('Could not save that card. Try again.')
-      return
-    }
-    setLastUsedDeckId(values.deckId)
-    onCreated?.(card)
-    setOpen(false)
-  }
+    }),
+    create: createCard,
+    errorMessage: 'Could not save that card. Try again.',
+    onCreated: (card) => {
+      setLastUsedDeckId(card.deckId)
+      onCreated?.(card)
+    },
+  })
 
   return { open, setOpen, initialDeckId, handleSubmit }
 }

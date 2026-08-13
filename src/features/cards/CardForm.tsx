@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -7,7 +6,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -15,8 +13,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
 import type { Deck } from '@/db/schema'
+import { FormTextareaField } from '@/shared/form/FormTextareaField'
+import { FormTextField } from '@/shared/form/FormTextField'
+import { SubmitButton } from '@/shared/form/SubmitButton'
 import type { CardFormValues } from './schema'
 import { useCardForm } from './useCardForm'
 
@@ -64,66 +64,32 @@ export function CardForm({ decks, defaultDeckId, onSubmit }: CardFormProps) {
           )}
         />
 
-        <FormField
+        <FormTextareaField
           control={form.control}
           name="front"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Front</FormLabel>
-              <FormControl>
-                <Textarea
-                  {...field}
-                  ref={(el) => {
-                    field.ref(el)
-                    setFrontRef(el)
-                  }}
-                  placeholder="What happens when a value is moved?"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Front"
+          placeholder="What happens when a value is moved?"
+          fieldRef={setFrontRef}
         />
 
-        <FormField
+        <FormTextareaField
           control={form.control}
           name="back"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Back</FormLabel>
-              <FormControl>
-                <Textarea
-                  {...field}
-                  placeholder="The previous owner becomes invalid..."
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Back"
+          placeholder="The previous owner becomes invalid..."
         />
 
-        <FormField
+        <FormTextField
           control={form.control}
           name="tags"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tags (optional)</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="ownership, borrowing" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Tags (optional)"
+          placeholder="ownership, borrowing"
         />
 
-        <Button
-          type="submit"
-          variant="violet"
-          className="self-start"
-          disabled={form.formState.isSubmitting}
-        >
-          {form.formState.isSubmitting ? 'Saving…' : 'Save Card'}
-        </Button>
+        <SubmitButton
+          isSubmitting={form.formState.isSubmitting}
+          label="Save Card"
+        />
       </form>
     </Form>
   )

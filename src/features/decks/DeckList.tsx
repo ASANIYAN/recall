@@ -1,6 +1,7 @@
-import { Link } from 'react-router'
 import { AddCardDialog } from '@/features/cards/AddCardDialog'
 import { AggregateBar } from '@/features/mastery/AggregateBar'
+import { EmptyState } from '@/shared/EmptyState'
+import { ListItemCardLink } from '@/shared/ListItemCard'
 import { PageLoading } from '@/shared/PageLoading'
 import { TextLink } from '@/shared/TextLink'
 import { AddDeckDialog } from './AddDeckDialog'
@@ -14,11 +15,9 @@ export function DeckList() {
   if (deckSummaries.length === 0) {
     return (
       <div className="flex min-h-svh items-center justify-center bg-bg p-8">
-        <div className="max-w-xl border-2 border-dashed border-ink-35 p-10 text-center">
-          <p className="mb-3 font-display text-2xl">［ ］</p>
-          <p className="mb-4 font-mono text-ink-60 text-xs">No decks yet.</p>
+        <EmptyState message="No decks yet." className="p-10">
           <AddDeckDialog onCreated={refresh} />
-        </div>
+        </EmptyState>
       </div>
     )
   }
@@ -35,11 +34,7 @@ export function DeckList() {
           </div>
         </div>
         {deckSummaries.map(({ deck, cards, masteredCount }) => (
-          <Link
-            key={deck.id}
-            to={`/decks/${deck.id}`}
-            className="flex items-center justify-between border-[3px] border-ink bg-surface px-5 py-4 shadow-sm transition-transform duration-150 ease-out hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-md active:translate-x-1 active:translate-y-1 active:shadow-none focus-visible:outline-2 focus-visible:outline-ink focus-visible:outline-offset-2"
-          >
+          <ListItemCardLink key={deck.id} to={`/decks/${deck.id}`}>
             <div>
               <div className="font-sans font-bold text-base text-ink">
                 {deck.name}
@@ -49,7 +44,7 @@ export function DeckList() {
               </div>
             </div>
             <AggregateBar cards={cards} size="mini" />
-          </Link>
+          </ListItemCardLink>
         ))}
       </div>
     </div>

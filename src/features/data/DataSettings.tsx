@@ -1,11 +1,6 @@
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { ConfirmDialog } from '@/shared/ConfirmDialog'
+import { Panel } from '@/shared/Panel'
 import { TextLink } from '@/shared/TextLink'
 import { useDataSettings } from './useDataSettings'
 
@@ -31,7 +26,7 @@ export function DataSettings() {
         <TextLink to="/app">← Decks</TextLink>
         <h1 className="font-display text-2xl text-ink uppercase">Data</h1>
 
-        <div className="flex flex-col items-start gap-3 border-[3px] border-ink bg-surface p-5">
+        <Panel>
           <h2 className="font-display text-ink text-xs uppercase">Export</h2>
           <p className="font-mono text-ink-60 text-xs">
             Download all decks and cards as JSON.
@@ -43,9 +38,9 @@ export function DataSettings() {
           >
             {isExporting ? 'Exporting…' : 'Export Data'}
           </Button>
-        </div>
+        </Panel>
 
-        <div className="flex flex-col items-start gap-3 border-[3px] border-ink bg-surface p-5">
+        <Panel>
           <h2 className="font-display text-ink text-xs uppercase">Import</h2>
           <p className="font-mono text-ink-60 text-xs">
             Existing decks and cards are updated by ID. Nothing is deleted.
@@ -66,43 +61,29 @@ export function DataSettings() {
           </Button>
           {error && <p className="font-mono text-pink text-xs">{error}</p>}
           {status && <p className="font-mono text-ink-60 text-xs">{status}</p>}
-        </div>
+        </Panel>
       </div>
 
-      <Dialog
+      <ConfirmDialog
         open={!!pendingImport}
         onOpenChange={(open) => !open && cancelImport()}
-      >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirm Import</DialogTitle>
-          </DialogHeader>
-          {pendingImport && (
+        title="Confirm Import"
+        description={
+          pendingImport && (
             <p className="font-mono text-ink-60 text-xs">
               Adds {pendingImport.summary.decksAdded} decks and{' '}
               {pendingImport.summary.cardsAdded} cards. Updates{' '}
               {pendingImport.summary.decksUpdated} decks and{' '}
               {pendingImport.summary.cardsUpdated} cards. Nothing is deleted.
             </p>
-          )}
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={cancelImport}
-              disabled={isImporting}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="violet"
-              onClick={confirmImport}
-              disabled={isImporting}
-            >
-              {isImporting ? 'Importing…' : 'Import'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          )
+        }
+        confirmLabel="Import"
+        pendingLabel="Importing…"
+        isPending={isImporting}
+        onConfirm={confirmImport}
+        onCancel={cancelImport}
+      />
     </div>
   )
 }
