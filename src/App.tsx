@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { DataSettings } from '@/features/data/DataSettings'
 import { DeckDetail } from '@/features/decks/DeckDetail'
 import { DeckList } from '@/features/decks/DeckList'
+import { LandingPage } from '@/features/landing/LandingPage'
 import { ReviewSession } from '@/features/review/ReviewSession'
 import { ChunkErrorBoundary } from '@/shared/ChunkErrorBoundary'
 import { PageLoading } from '@/shared/PageLoading'
@@ -13,14 +14,6 @@ import { PageMessage } from '@/shared/PageMessage'
 // the daily-use core path, so it stays out of the main bundle.
 const StatsPage = lazy(() =>
   import('@/features/stats/StatsPage').then((m) => ({ default: m.StatsPage })),
-)
-
-// Motion (the animation library) is landing-page only — lazy so it never
-// loads for anyone going straight to the app itself.
-const LandingPage = lazy(() =>
-  import('@/features/landing/LandingPage').then((m) => ({
-    default: m.LandingPage,
-  })),
 )
 
 function ReviewRoute() {
@@ -52,14 +45,7 @@ function App() {
     <BrowserRouter>
       <ChunkErrorBoundary>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <Suspense fallback={<PageLoading />}>
-                <LandingPage />
-              </Suspense>
-            }
-          />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/app" element={<DeckList />} />
           <Route path="/decks/:deckId" element={<DeckDetail />} />
           <Route path="/review" element={<ReviewSession />} />
