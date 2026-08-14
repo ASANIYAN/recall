@@ -31,7 +31,7 @@ export function DeckDetail() {
 
   return (
     <div className="min-h-svh bg-bg p-4 sm:p-8">
-      <div className="mx-auto flex max-w-2xl flex-col gap-6">
+      <div className="mx-auto flex max-w-3xl flex-col gap-6">
         <TextLink to="/app">← Decks</TextLink>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
